@@ -115,13 +115,12 @@ func UnquoteUsage(flag *Flag) (name string, usage string) {
 // default values of all defined command-line flags in the set. See the
 // documentation for the global function PrintDefaults for more information.
 func (f *FlagSet) PrintDefaults() {
-	fmt.Fprint(f.Output(), "\n")
 	f.VisitAll(func(flag *Flag) {
 		s := ""
 		if flag.Alias > 0 {
 			s = fmt.Sprintf("  -%c, --%s", flag.Alias, flag.Name)
 		} else {
-			s = fmt.Sprintf("       --%s", flag.Name)
+			s = fmt.Sprintf("  --%s", flag.Name)
 		}
 
 		name, usage := UnquoteUsage(flag)
@@ -149,7 +148,6 @@ func (f *FlagSet) PrintDefaults() {
 		}
 		fmt.Fprint(f.Output(), s, "\n")
 	})
-	fmt.Fprint(f.Output(), "\n")
 }
 
 // PrintDefaults prints, to standard error unless configured otherwise,
