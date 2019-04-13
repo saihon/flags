@@ -41,19 +41,31 @@ func (f *FlagSet) setValue(flag *Flag, value string, hasValue bool) error {
 	if b, ok := flag.Value.(boolFlag); ok && b.IsBoolFlag() {
 		if hasValue {
 			if err := flag.Value.Set(value); err != nil {
+				if err == ErrHelp {
+					return err
+				}
 				return f.failf("invalid boolean value %q for --%s: %v", value, flag.Name, err)
 			}
 		} else {
 			if err := flag.Value.Set("true"); err != nil {
+				if err == ErrHelp {
+					return err
+				}
 				return f.failf("invalid boolean flag %s: %v", flag.Name, err)
 			}
 		}
 	} else if hasValue {
 		if err := flag.Value.Set(value); err != nil {
+			if err == ErrHelp {
+				return err
+			}
 			return f.failf("invalid boolean value %q for --%s: %v", value, flag.Name, err)
 		}
 	} else if f.index < len(f.args) {
 		if err := flag.Value.Set(f.cut()); err != nil {
+			if err == ErrHelp {
+				return err
+			}
 			return f.failf("invalid value %q for flag --%s: %v", value, flag.Name, err)
 		}
 	} else {
