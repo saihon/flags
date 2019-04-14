@@ -39,7 +39,7 @@ func (v *versionValue) Set(s string) error {
 
 func (v *versionValue) Get() interface{} { return v.b }
 
-func (v *versionValue) String() string { return strconv.FormatBool(*v.b) }
+func (v *versionValue) String() string { return "false" }
 
 func (v *versionValue) IsBoolFlag() bool { return true }
 
