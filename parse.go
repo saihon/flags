@@ -37,40 +37,45 @@ func (f *FlagSet) cut() string {
 }
 
 func (f *FlagSet) setValue(flag *Flag, value string, hasValue bool) error {
+	var err error
 	// boolean value is inverted unless a value is explicitly specified with "="
 	if b, ok := flag.Value.(boolFlag); ok && b.IsBoolFlag() {
 		if hasValue {
-			if err := flag.Value.Set(value); err != nil {
-				if err == ErrHelp {
-					return err
-				}
-				return f.failf("invalid boolean value %q for --%s: %v", value, flag.Name, err)
+			if err = flag.Value.Set(value); err != nil && err != ErrHelp {
+				err = f.failf("invalid boolean value %q for --%s: %v", value, flag.Name, err)
 			}
 		} else {
-			if err := flag.Value.Set("true"); err != nil {
-				if err == ErrHelp {
-					return err
-				}
-				return f.failf("invalid boolean flag %s: %v", flag.Name, err)
+			if err = flag.Value.Set("true"); err != nil && err != ErrHelp {
+				err = f.failf("invalid boolean flag %s: %v", flag.Name, err)
 			}
 		}
 	} else if hasValue {
-		if err := flag.Value.Set(value); err != nil {
-			if err == ErrHelp {
-				return err
-			}
-			return f.failf("invalid boolean value %q for --%s: %v", value, flag.Name, err)
+		if err = flag.Value.Set(value); err != nil && err != ErrHelp {
+			err = f.failf("invalid boolean value %q for --%s: %v", value, flag.Name, err)
 		}
 	} else if f.index < len(f.args) {
-		if err := flag.Value.Set(f.cut()); err != nil {
-			if err == ErrHelp {
-				return err
-			}
-			return f.failf("invalid value %q for flag --%s: %v", value, flag.Name, err)
+		if err = flag.Value.Set(f.cut()); err != nil && err != ErrHelp {
+			err = f.failf("invalid value %q for flag --%s: %v", value, flag.Name, err)
 		}
 	} else {
-		return f.failf("flag needs an argument: --%s", flag.Name)
+		err = f.failf("flag needs an argument: --%s", flag.Name)
 	}
+
+	if err != nil {
+		return err
+	}
+
+	if flag.fn != nil {
+		g, ok := flag.Value.(Getter)
+		if !ok {
+			return f.failf("Should implement the Getter interface requirements: callback %s", flag.Name)
+		}
+
+		if err := flag.fn(g); err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 

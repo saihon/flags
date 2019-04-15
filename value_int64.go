@@ -29,26 +29,26 @@ func (i *int64Value) String() string { return strconv.FormatInt(int64(*i), 10) }
 
 // Int64Var defines an int64 flag with specified name, default value, and usage string.
 // The argument p points to an int64 variable in which to store the value of the flag.
-func (f *FlagSet) Int64Var(p *int64, name string, alias rune, value int64, usage string) {
-	f.Var(newInt64Value(value, p), name, alias, usage)
+func (f *FlagSet) Int64Var(p *int64, name string, alias rune, value int64, usage string, fn Callback) {
+	f.Var(newInt64Value(value, p), name, alias, usage, fn)
 }
 
 // Int64Var defines an int64 flag with specified name, default value, and usage string.
 // The argument p points to an int64 variable in which to store the value of the flag.
-func Int64Var(p *int64, name string, alias rune, value int64, usage string) {
-	CommandLine.Var(newInt64Value(value, p), name, alias, usage)
+func Int64Var(p *int64, name string, alias rune, value int64, usage string, fn Callback) {
+	CommandLine.Var(newInt64Value(value, p), name, alias, usage, fn)
 }
 
 // Int64 defines an int64 flag with specified name, default value, and usage string.
 // The return value is the address of an int64 variable that stores the value of the flag.
-func (f *FlagSet) Int64(name string, alias rune, value int64, usage string) *int64 {
+func (f *FlagSet) Int64(name string, alias rune, value int64, usage string, fn Callback) *int64 {
 	p := new(int64)
-	f.Int64Var(p, name, alias, value, usage)
+	f.Int64Var(p, name, alias, value, usage, fn)
 	return p
 }
 
 // Int64 defines an int64 flag with specified name, default value, and usage string.
 // The return value is the address of an int64 variable that stores the value of the flag.
-func Int64(name string, alias rune, value int64, usage string) *int64 {
-	return CommandLine.Int64(name, alias, value, usage)
+func Int64(name string, alias rune, value int64, usage string, fn Callback) *int64 {
+	return CommandLine.Int64(name, alias, value, usage, fn)
 }

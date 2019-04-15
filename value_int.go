@@ -29,26 +29,26 @@ func (i *intValue) String() string { return strconv.Itoa(int(*i)) }
 
 // IntVar defines an int flag with specified name, default value, and usage string.
 // The argument p points to an int variable in which to store the value of the flag.
-func (f *FlagSet) IntVar(p *int, name string, alias rune, value int, usage string) {
-	f.Var(newIntValue(value, p), name, alias, usage)
+func (f *FlagSet) IntVar(p *int, name string, alias rune, value int, usage string, fn Callback) {
+	f.Var(newIntValue(value, p), name, alias, usage, fn)
 }
 
 // IntVar defines an int flag with specified name, default value, and usage string.
 // The argument p points to an int variable in which to store the value of the flag.
-func IntVar(p *int, name string, alias rune, value int, usage string) {
-	CommandLine.Var(newIntValue(value, p), name, alias, usage)
+func IntVar(p *int, name string, alias rune, value int, usage string, fn Callback) {
+	CommandLine.Var(newIntValue(value, p), name, alias, usage, fn)
 }
 
 // Int defines an int flag with specified name, default value, and usage string.
 // The return value is the address of an int variable that stores the value of the flag.
-func (f *FlagSet) Int(name string, alias rune, value int, usage string) *int {
+func (f *FlagSet) Int(name string, alias rune, value int, usage string, fn Callback) *int {
 	p := new(int)
-	f.IntVar(p, name, alias, value, usage)
+	f.IntVar(p, name, alias, value, usage, fn)
 	return p
 }
 
 // Int defines an int flag with specified name, default value, and usage string.
 // The return value is the address of an int variable that stores the value of the flag.
-func Int(name string, alias rune, value int, usage string) *int {
-	return CommandLine.Int(name, alias, value, usage)
+func Int(name string, alias rune, value int, usage string, fn Callback) *int {
+	return CommandLine.Int(name, alias, value, usage, fn)
 }

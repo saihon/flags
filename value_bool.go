@@ -38,26 +38,26 @@ type boolFlag interface {
 
 // BoolVar defines a bool flag with specified name, default value, and usage string.
 // The argument p points to a bool variable in which to store the value of the flag.
-func (f *FlagSet) BoolVar(p *bool, name string, alias rune, value bool, usage string) {
-	f.Var(newBoolValue(value, p), name, alias, usage)
+func (f *FlagSet) BoolVar(p *bool, name string, alias rune, value bool, usage string, fn Callback) {
+	f.Var(newBoolValue(value, p), name, alias, usage, fn)
 }
 
 // BoolVar defines a bool flag with specified name, default value, and usage string.
 // The argument p points to a bool variable in which to store the value of the flag.
-func BoolVar(p *bool, name string, alias rune, value bool, usage string) {
-	CommandLine.Var(newBoolValue(value, p), name, alias, usage)
+func BoolVar(p *bool, name string, alias rune, value bool, usage string, fn Callback) {
+	CommandLine.Var(newBoolValue(value, p), name, alias, usage, fn)
 }
 
 // Bool defines a bool flag with specified name, default value, and usage string.
 // The return value is the address of a bool variable that stores the value of the flag.
-func (f *FlagSet) Bool(name string, alias rune, value bool, usage string) *bool {
+func (f *FlagSet) Bool(name string, alias rune, value bool, usage string, fn Callback) *bool {
 	p := new(bool)
-	f.BoolVar(p, name, alias, value, usage)
+	f.BoolVar(p, name, alias, value, usage, fn)
 	return p
 }
 
 // Bool defines a bool flag with specified name, default value, and usage string.
 // The return value is the address of a bool variable that stores the value of the flag.
-func Bool(name string, alias rune, value bool, usage string) *bool {
-	return CommandLine.Bool(name, alias, value, usage)
+func Bool(name string, alias rune, value bool, usage string, fn Callback) *bool {
+	return CommandLine.Bool(name, alias, value, usage, fn)
 }

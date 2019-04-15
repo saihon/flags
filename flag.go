@@ -150,6 +150,9 @@ type FlagSet struct {
 	output        io.Writer // nil means stderr; use out() accessor
 }
 
+// Callback implements callback function
+type Callback func(Getter) error
+
 // A Flag represents the state of a flag.
 type Flag struct {
 	Name string // name as it appears on command line
@@ -159,6 +162,8 @@ type Flag struct {
 	Usage    string // help message
 	Value    Value  // value as set
 	DefValue string // default value (as text); for usage message
+
+	fn Callback
 }
 
 // Output returns the destination for usage and error messages. os.Stderr is returned if
@@ -260,9 +265,9 @@ func Args() []string { return CommandLine.args }
 // caller could create a flag that turns a comma-separated string into a slice
 // of strings by giving the slice the methods of Value; in particular, Set would
 // decompose the comma-separated string into the slice.
-func (f *FlagSet) Var(value Value, name string, alias rune, usage string) {
+func (f *FlagSet) Var(value Value, name string, alias rune, usage string, fn Callback) {
 	// Remember the default value as a string; it won't change.
-	flag := &Flag{Name: name, Alias: alias, Usage: usage, Value: value, DefValue: value.String()}
+	flag := &Flag{Name: name, Alias: alias, Usage: usage, Value: value, DefValue: value.String(), fn: fn}
 
 	_, alreadythere := f.formal[name]
 	if alreadythere {
@@ -315,8 +320,8 @@ func (f *FlagSet) Var(value Value, name string, alias rune, usage string) {
 // caller could create a flag that turns a comma-separated string into a slice
 // of strings by giving the slice the methods of Value; in particular, Set would
 // decompose the comma-separated string into the slice.
-func Var(value Value, name string, alias rune, usage string) {
-	CommandLine.Var(value, name, alias, usage)
+func Var(value Value, name string, alias rune, usage string, fn Callback) {
+	CommandLine.Var(value, name, alias, usage, fn)
 }
 
 // CommandLine is the default set of command-line flags, parsed from os.Args.

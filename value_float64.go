@@ -29,26 +29,26 @@ func (f *float64Value) String() string { return strconv.FormatFloat(float64(*f),
 
 // Float64Var defines a float64 flag with specified name, default value, and usage string.
 // The argument p points to a float64 variable in which to store the value of the flag.
-func (f *FlagSet) Float64Var(p *float64, name string, alias rune, value float64, usage string) {
-	f.Var(newFloat64Value(value, p), name, alias, usage)
+func (f *FlagSet) Float64Var(p *float64, name string, alias rune, value float64, usage string, fn Callback) {
+	f.Var(newFloat64Value(value, p), name, alias, usage, fn)
 }
 
 // Float64Var defines a float64 flag with specified name, default value, and usage string.
 // The argument p points to a float64 variable in which to store the value of the flag.
-func Float64Var(p *float64, name string, alias rune, value float64, usage string) {
-	CommandLine.Var(newFloat64Value(value, p), name, alias, usage)
+func Float64Var(p *float64, name string, alias rune, value float64, usage string, fn Callback) {
+	CommandLine.Var(newFloat64Value(value, p), name, alias, usage, fn)
 }
 
 // Float64 defines a float64 flag with specified name, default value, and usage string.
 // The return value is the address of a float64 variable that stores the value of the flag.
-func (f *FlagSet) Float64(name string, alias rune, value float64, usage string) *float64 {
+func (f *FlagSet) Float64(name string, alias rune, value float64, usage string, fn Callback) *float64 {
 	p := new(float64)
-	f.Float64Var(p, name, alias, value, usage)
+	f.Float64Var(p, name, alias, value, usage, fn)
 	return p
 }
 
 // Float64 defines a float64 flag with specified name, default value, and usage string.
 // The return value is the address of a float64 variable that stores the value of the flag.
-func Float64(name string, alias rune, value float64, usage string) *float64 {
-	return CommandLine.Float64(name, alias, value, usage)
+func Float64(name string, alias rune, value float64, usage string, fn Callback) *float64 {
+	return CommandLine.Float64(name, alias, value, usage, fn)
 }

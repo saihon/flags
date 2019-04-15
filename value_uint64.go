@@ -29,26 +29,26 @@ func (i *uint64Value) String() string { return strconv.FormatUint(uint64(*i), 10
 
 // Uint64Var defines a uint64 flag with specified name, default value, and usage string.
 // The argument p points to a uint64 variable in which to store the value of the flag.
-func (f *FlagSet) Uint64Var(p *uint64, name string, alias rune, value uint64, usage string) {
-	f.Var(newUint64Value(value, p), name, alias, usage)
+func (f *FlagSet) Uint64Var(p *uint64, name string, alias rune, value uint64, usage string, fn Callback) {
+	f.Var(newUint64Value(value, p), name, alias, usage, fn)
 }
 
 // Uint64Var defines a uint64 flag with specified name, default value, and usage string.
 // The argument p points to a uint64 variable in which to store the value of the flag.
-func Uint64Var(p *uint64, name string, alias rune, value uint64, usage string) {
-	CommandLine.Var(newUint64Value(value, p), name, alias, usage)
+func Uint64Var(p *uint64, name string, alias rune, value uint64, usage string, fn Callback) {
+	CommandLine.Var(newUint64Value(value, p), name, alias, usage, fn)
 }
 
 // Uint64 defines a uint64 flag with specified name, default value, and usage string.
 // The return value is the address of a uint64 variable that stores the value of the flag.
-func (f *FlagSet) Uint64(name string, alias rune, value uint64, usage string) *uint64 {
+func (f *FlagSet) Uint64(name string, alias rune, value uint64, usage string, fn Callback) *uint64 {
 	p := new(uint64)
-	f.Uint64Var(p, name, alias, value, usage)
+	f.Uint64Var(p, name, alias, value, usage, fn)
 	return p
 }
 
 // Uint64 defines a uint64 flag with specified name, default value, and usage string.
 // The return value is the address of a uint64 variable that stores the value of the flag.
-func Uint64(name string, alias rune, value uint64, usage string) *uint64 {
-	return CommandLine.Uint64(name, alias, value, usage)
+func Uint64(name string, alias rune, value uint64, usage string, fn Callback) *uint64 {
+	return CommandLine.Uint64(name, alias, value, usage, fn)
 }

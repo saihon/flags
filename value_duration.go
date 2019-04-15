@@ -30,29 +30,29 @@ func (d *durationValue) String() string { return (*time.Duration)(d).String() }
 // DurationVar defines a time.Duration flag with specified name, default value, and usage string.
 // The argument p points to a time.Duration variable in which to store the value of the flag.
 // The flag accepts a value acceptable to time.ParseDuration.
-func (f *FlagSet) DurationVar(p *time.Duration, name string, alias rune, value time.Duration, usage string) {
-	f.Var(newDurationValue(value, p), name, alias, usage)
+func (f *FlagSet) DurationVar(p *time.Duration, name string, alias rune, value time.Duration, usage string, fn Callback) {
+	f.Var(newDurationValue(value, p), name, alias, usage, fn)
 }
 
 // DurationVar defines a time.Duration flag with specified name, default value, and usage string.
 // The argument p points to a time.Duration variable in which to store the value of the flag.
 // The flag accepts a value acceptable to time.ParseDuration.
-func DurationVar(p *time.Duration, name string, alias rune, value time.Duration, usage string) {
-	CommandLine.Var(newDurationValue(value, p), name, alias, usage)
+func DurationVar(p *time.Duration, name string, alias rune, value time.Duration, usage string, fn Callback) {
+	CommandLine.Var(newDurationValue(value, p), name, alias, usage, fn)
 }
 
 // Duration defines a time.Duration flag with specified name, default value, and usage string.
 // The return value is the address of a time.Duration variable that stores the value of the flag.
 // The flag accepts a value acceptable to time.ParseDuration.
-func (f *FlagSet) Duration(name string, alias rune, value time.Duration, usage string) *time.Duration {
+func (f *FlagSet) Duration(name string, alias rune, value time.Duration, usage string, fn Callback) *time.Duration {
 	p := new(time.Duration)
-	f.DurationVar(p, name, alias, value, usage)
+	f.DurationVar(p, name, alias, value, usage, fn)
 	return p
 }
 
 // Duration defines a time.Duration flag with specified name, default value, and usage string.
 // The return value is the address of a time.Duration variable that stores the value of the flag.
 // The flag accepts a value acceptable to time.ParseDuration.
-func Duration(name string, alias rune, value time.Duration, usage string) *time.Duration {
-	return CommandLine.Duration(name, alias, value, usage)
+func Duration(name string, alias rune, value time.Duration, usage string, fn Callback) *time.Duration {
+	return CommandLine.Duration(name, alias, value, usage, fn)
 }
