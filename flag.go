@@ -69,6 +69,11 @@ import (
 // but no such flag is defined.
 var ErrHelp = errors.New("flag: help requested")
 
+// IsIgnorableError
+func IsIgnorableError(err error) bool {
+	return err.Error() == ErrHelp.Error()
+}
+
 // errParse is returned by Set if a flag's value fails to parse, such as with an invalid integer for Int.
 // It then gets wrapped through failf to provide more information.
 var errParse = errors.New("parse error")
