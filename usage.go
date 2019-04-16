@@ -202,3 +202,28 @@ var Usage = func() {
 	fmt.Fprintf(CommandLine.Output(), "\nUsage: %s\n", os.Args[0])
 	PrintDefaults()
 }
+
+func (f *FlagSet) PrintCustom() {
+	f.VisitAll(func(flag *Flag) {
+		s := ""
+		if flag.Alias > 0 {
+			s = fmt.Sprintf("  -%c, --%s", flag.Alias, flag.Name)
+		} else {
+			s = fmt.Sprintf("  --%s", flag.Name)
+		}
+
+		_, usage := UnquoteUsage(flag)
+		if len(s) <= 4 {
+			s += "\t"
+		} else {
+			s += "\n    \t"
+		}
+		s += strings.ReplaceAll(usage, "\n", "\n    \t")
+
+		fmt.Fprint(f.Output(), s, "\n")
+	})
+}
+
+func PrintCustom() {
+	CommandLine.PrintCustom()
+}
